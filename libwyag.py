@@ -58,7 +58,7 @@ def repo_create(path):
     repo = WyagRepository(path, True)
 
     # First, we make sure the path either doesn't exist or is an empty dir.
-    print("########\n验证")
+    print(f"########\n验证{repo.worktree}目录情况\n#######")
     if os.path.exists(repo.worktree):
         if not os.path.isdir(repo.worktree):
             raise Exception("{} is not a directory".format(path))
@@ -66,7 +66,6 @@ def repo_create(path):
             raise Exception("{} is not empty".format(path))
     else:
         os.makedirs(repo.worktree)
-
 
     assert (repo_dir(repo, "branches", mkdir=True))
     assert (repo_dir(repo, "objects", mkdir=True))
@@ -192,3 +191,13 @@ def repo_find(path = ".", required=True):
     
     return repo_find(parent,required)
 
+# 创建wyag对象基类
+class WyagObject(object):
+    
+    repo = None
+    
+    def __init__(self, repo, data = None):
+        self.repo = repo
+
+        if data != None:
+            self.deserialize(data)
