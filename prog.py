@@ -6,7 +6,7 @@
 
 import argparse
 import configparser
-import os,re,sys,shutil
+import os,re,sys,shutil,zlib
 
 """argparse 测试部分
 """
@@ -47,7 +47,7 @@ class DogNotFoundException(Exception):
 
 try:
     os.makedirs("./1/2/3/4/5")
-    #shutil.rmtree("./1/")
+    shutil.rmtree("./1/")
     config = configparser.ConfigParser()
     config.read("./test.conf") # 读取文件，如果目录内无该文件则创
     config.add_section('module_1') # 添加section
@@ -63,3 +63,13 @@ except DogNotFoundException:
 assert ("./a")
 
 print(sys.argv[1:])
+
+path = "D:\game\python_game\wyag\.git\objects\\0e\ee738299e02930564a7519e609a25902e696d2"
+with open(path, "rb") as f:
+    raw = zlib.decompress(f.read())
+    print(raw)
+    x = raw.find(b' ')
+    print(x)
+    y = raw.find(b'\x00', x)
+    size = int(raw[x:y].decode('ascii'))
+    print(raw[x+1:y],size)
